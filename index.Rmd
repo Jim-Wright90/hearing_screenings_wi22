@@ -9,7 +9,7 @@ output:
     theme: 
       version: 4
       bg: "#101010"
-      fg: "#FDF7F7" 
+      fg: "#101010" 
       primary: "#ED79F9"
       navbar-bg: "#3ADAC6"
       
@@ -61,32 +61,113 @@ ear <- import(here("data", "hearing_screening.sav"),
 
 str(ear)
 
+ear$grade <- factor(ear$grade, levels = c("kindergarten",
+                                          "1st grade"))
+
+ear$screen_res <- factor(ear$screen_res, levels = c("pass",
+                                                    "pass with OAE",
+                                                    "refer",
+                                                    "absent"))
+
+
 ear_res <- ear %>% 
   group_by(grade, school) %>% 
   count(screen_res)
+
+ear %>% 
+  group_by(screen_res) %>% 
+  count()
 ```
 
-Column {data-width=650}
+# Results 
+
+Row {.tabset}
 -----------------------------------------------------------------------
 
-### Chart A
+### Grade 
 
-```{r}
+```{r, include=FALSE}
+ear_grade <- ear %>% 
+  group_by(grade) %>% 
+  count() 
+
+ear_school <- ear %>% 
+  group_by(school) %>% 
+  count()
 
 ```
 
-Column {data-width=350}
+```{r, include=FALSE}
+grd_tbl <- ear_grade %>% 
+  reactable(columns = list(
+    grade = colDef(name = "Grade",
+                   align = "center"),
+    n = colDef(name = "Total",
+               align = "center",
+               format = colFormat(suffix = " students"))
+  ),
+  striped = TRUE,
+  outlined = TRUE,
+  compact = TRUE,
+  highlight = TRUE,
+  bordered = TRUE)
+
+sch_tbl <- ear_school %>% 
+  reactable(columns = list(
+    school = colDef(name = "School",
+                   align = "center"),
+    n = colDef(name = "Total",
+               align = "center",
+               format = colFormat(suffix = " students"))
+  ),
+  striped = TRUE,
+  outlined = TRUE,
+  compact = TRUE,
+  highlight = TRUE,
+  bordered = TRUE)
+```
+
+```{r, include=TRUE}
+grd_tbl
+```
+
+### School
+
+```{r, include=TRUE}
+sch_tbl
+```
+
+
+
+Row {.tabset}
 -----------------------------------------------------------------------
 
-### Chart B
+### Screening Results 
 
-```{r}
+```{r, include=FALSE}
+
+res_tbl <- ear_res %>% 
+  reactable(columns = list(
+    grade = colDef(name = "Grade",
+                   align = "center"),
+    school = colDef(name = "School",
+                    align = "center"),
+    screen_res = colDef(name = "Screening Result",
+                        align = "center"),
+    n = colDef(name = "Total",
+               align = "center",
+               format = colFormat(suffix = " students"))),
+  striped = TRUE,
+  outlined = TRUE,
+  compact = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  searchable = TRUE)
+
+
 
 ```
 
-### Chart C
-
-```{r}
-
+```{r, include=TRUE}
+res_tbl
 ```
-
