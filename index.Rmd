@@ -1,0 +1,92 @@
+---
+title: "Winter 2022 Thursday Hearing Screenings"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+    vertical_layout: scroll
+    theme: 
+      version: 4
+      bg: "#101010"
+      fg: "#FDF7F7" 
+      primary: "#ED79F9"
+      navbar-bg: "#3ADAC6"
+      
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(here)
+library(janitor)
+library(rio)
+library(colorblindr)
+library(gghighlight)
+library(forcats)
+library(ggrepel)
+library(gt)
+library(knitr)
+library(kableExtra)
+library(reactable)
+library(plotly)
+library(glue)
+library(fs)
+library(rstatix)
+library(ggpubr)
+library(writexl)
+library(remotes)
+library(profvis)
+
+theme_set(theme_minimal(15) +
+            theme(legend.position = "bottom",
+                  panel.grid.major.x = element_line(colour = "gray60"),
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.y = element_blank())
+          )
+
+```
+
+```{r, include=FALSE}
+ear <- import(here("data", "hearing_screening.sav"),
+               setclass = "tbl_df") %>% 
+  characterize() %>% 
+  janitor::clean_names() %>% 
+  mutate(grade = as.factor(grade),
+         school = as.factor(school),
+         screen_res = as.factor(screen_res))
+
+str(ear)
+
+ear_res <- ear %>% 
+  group_by(grade, school) %>% 
+  count(screen_res)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
