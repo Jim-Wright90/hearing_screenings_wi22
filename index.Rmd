@@ -77,6 +77,32 @@ ear_res <- ear %>%
 ear %>% 
   group_by(screen_res) %>% 
   count()
+
+screen_stat <- ear_res %>% 
+  mutate(screened = screen_res == "pass" & 
+           screen_res == "pass with OAE" &
+           screen_res == "refer",
+         absent = screen_res == "absent")
+
+screen_stat2 <- ear %>% 
+  group_by(screen_res, school) %>% 
+  count() %>% 
+  pivot_wider(
+    names_from = screen_res,
+    values_from = n
+  ) %>% 
+  mutate(screened = sum(`pass` + `pass with OAE` + `refer`)) %>% 
+  select(1, 2, 3, 4, 6, 5)
+
+screen_stat3 <- ear %>% 
+  group_by(screen_res, grade) %>% 
+  count() %>% 
+  pivot_wider(
+    names_from = screen_res,
+    values_from = n
+  ) %>% 
+  mutate(screened = sum(`pass` + `pass with OAE` + `refer`)) %>% 
+  select(1, 2, 3, 4, 6, 5)
 ```
 
 # Results 
@@ -84,7 +110,6 @@ ear %>%
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### Grade 
 
 ```{r, include=FALSE}
 ear_grade <- ear %>% 
@@ -112,6 +137,28 @@ grd_tbl <- ear_grade %>%
   highlight = TRUE,
   bordered = TRUE)
 
+grd_tbl2 <- screen_stat3 %>% 
+  reactable(
+    columns = list(
+      grade = colDef(name = "Grade",
+                      align = "center"),
+      pass = colDef(name = "Total Passed",
+                    align = "center"),
+      `pass with OAE` = colDef(name = "Total Passed with OAE",
+                               align = "center"),
+      refer = colDef(name = "Total Referred",
+                     align = "center"),
+      screened = colDef(name = "Total Screened",
+                        align = "center"),
+      absent = colDef(name = "Total Absent",
+                      align = "center")),
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+
 sch_tbl <- ear_school %>% 
   reactable(columns = list(
     school = colDef(name = "School",
@@ -125,17 +172,43 @@ sch_tbl <- ear_school %>%
   compact = TRUE,
   highlight = TRUE,
   bordered = TRUE)
-```
 
-```{r, include=TRUE}
-grd_tbl
+sch_tbl2 <- screen_stat2 %>% 
+  reactable(
+    columns = list(
+      school = colDef(name = "School",
+                      align = "center"),
+      pass = colDef(name = "Total Passed",
+                    align = "center"),
+      `pass with OAE` = colDef(name = "Total Passed with OAE",
+                               align = "center"),
+      refer = colDef(name = "Total Referred",
+                     align = "center"),
+      screened = colDef(name = "Total Screened",
+                        align = "center"),
+      absent = colDef(name = "Total Absent",
+                      align = "center")),
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
 ```
 
 ### School
 
 ```{r, include=TRUE}
-sch_tbl
+sch_tbl2
 ```
+
+### Grade
+
+```{r, include=TRUE}
+grd_tbl2
+```
+
+
 
 
 
