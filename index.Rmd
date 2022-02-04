@@ -66,7 +66,7 @@ ear$grade <- factor(ear$grade, levels = c("kindergarten",
 
 ear$screen_res <- factor(ear$screen_res, levels = c("pass",
                                                     "pass with OAE",
-                                                    "refer or rescreen",
+                                                    "refer",
                                                     "absent"))
 
 ear$school
@@ -87,7 +87,7 @@ ear %>%
 screen_stat <- ear_res %>% 
   mutate(screened = screen_res == "pass" & 
            screen_res == "pass with OAE" &
-           screen_res == "refer or rescreen",
+           screen_res == "refer",
          absent = screen_res == "absent")
 
 screen_stat2 <- ear %>% 
@@ -97,7 +97,7 @@ screen_stat2 <- ear %>%
     names_from = screen_res,
     values_from = n
   ) %>% 
-  mutate(screened = sum(`pass` + `pass with OAE` + `refer or rescreen`)) %>% 
+  mutate(screened = sum(`pass` + `pass with OAE` + refer)) %>% 
   select(1, 2, 3, 4, 6, 5)
 
 screen_stat3 <- ear %>% 
@@ -107,7 +107,7 @@ screen_stat3 <- ear %>%
     names_from = screen_res,
     values_from = n
   ) %>% 
-  mutate(screened = sum(`pass` + `pass with OAE` + `refer or rescreen`)) %>% 
+  mutate(screened = sum(`pass` + `pass with OAE` + refer)) %>% 
   select(1, 2, 3, 4, 6, 5)
 ```
 
@@ -152,7 +152,7 @@ grd_tbl2 <- screen_stat3 %>%
                     align = "center"),
       `pass with OAE` = colDef(name = "Total Passed with OAE",
                                align = "center"),
-      `refer or rescreen` = colDef(name = "Total to be Referred or Rescreened",
+      refer = colDef(name = "Total Referred",
                      align = "center"),
       screened = colDef(name = "Total Screened",
                         align = "center"),
@@ -188,7 +188,7 @@ sch_tbl2 <- screen_stat2 %>%
                     align = "center"),
       `pass with OAE` = colDef(name = "Total Passed with OAE",
                                align = "center"),
-      `refer or rescreen` = colDef(name = "Total to be Referred or Rescreened",
+      refer = colDef(name = "Total Referred",
                      align = "center"),
       screened = colDef(name = "Total Screened",
                         align = "center"),
