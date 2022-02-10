@@ -62,7 +62,8 @@ ear <- import(here("data", "hearing_screening.sav"),
 str(ear)
 
 ear$grade <- factor(ear$grade, levels = c("kindergarten",
-                                          "1st grade"))
+                                          "1st grade",
+                                          "2nd grade"))
 
 ear$screen_res <- factor(ear$screen_res, levels = c("pass",
                                                     "pass with OAE",
@@ -73,7 +74,8 @@ ear$school
 
 ear$school <- factor(ear$school, levels = c("Twin Oaks",
                                             "McCornack",
-                                            "River Road"))
+                                            "River Road",
+                                            "Beuna Vista"))
 
 
 ear_res <- ear %>% 
