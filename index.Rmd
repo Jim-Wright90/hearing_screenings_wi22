@@ -61,6 +61,7 @@ ear <- import(here("data", "hearing_screening.sav"),
 
 str(ear)
 
+
 ear$grade <- factor(ear$grade, levels = c("kindergarten",
                                           "1st grade",
                                           "2nd grade"))
@@ -75,7 +76,7 @@ ear$school
 ear$school <- factor(ear$school, levels = c("Twin Oaks",
                                             "McCornack",
                                             "River Road",
-                                            "Beuna Vista"))
+                                            "Buena Vista"))
 
 
 ear_res <- ear %>% 
@@ -99,8 +100,10 @@ screen_stat2 <- ear %>%
     names_from = screen_res,
     values_from = n
   ) %>% 
-  mutate(screened = sum(`pass` + `pass with OAE` + refer)) %>% 
-  select(1, 2, 3, 4, 6, 5)
+  mutate(screened = sum(`pass` + `pass with OAE` + refer),
+         total_passed = sum(`pass` + `pass with OAE`),
+         pass_pct = (total_passed / screened)) %>% 
+  select(1, 2, 3, 7, 4, 6, 5, 8)
 
 screen_stat3 <- ear %>% 
   group_by(screen_res, grade) %>% 
@@ -109,8 +112,10 @@ screen_stat3 <- ear %>%
     names_from = screen_res,
     values_from = n
   ) %>% 
-  mutate(screened = sum(`pass` + `pass with OAE` + refer)) %>% 
-  select(1, 2, 3, 4, 6, 5)
+  mutate(screened = sum(`pass` + `pass with OAE` + refer),
+         total_passed = sum(`pass` + `pass with OAE`),
+         pass_pct = (total_passed / screened)) %>% 
+  select(1, 2, 3, 7, 4, 6, 5, 8)
 ```
 
 # Results 
@@ -150,16 +155,21 @@ grd_tbl2 <- screen_stat3 %>%
     columns = list(
       grade = colDef(name = "Grade",
                       align = "center"),
-      pass = colDef(name = "Total Passed",
+      pass = colDef(name = "Total Passed with Pure Tone",
                     align = "center"),
       `pass with OAE` = colDef(name = "Total Passed with OAE",
                                align = "center"),
+      `total_passed` = colDef(name = "Total Passed",
+                              align = "center"),
       refer = colDef(name = "Total Referred",
                      align = "center"),
       screened = colDef(name = "Total Screened",
                         align = "center"),
       absent = colDef(name = "Total Absent",
-                      align = "center")),
+                      align = "center"),
+      pass_pct = colDef(name = "Pass Rate",
+                        align = "center",
+                        format = colFormat(percent = TRUE, digits = 2))),
     striped = TRUE,
     outlined = TRUE,
     compact = TRUE,
@@ -186,16 +196,21 @@ sch_tbl2 <- screen_stat2 %>%
     columns = list(
       school = colDef(name = "School",
                       align = "center"),
-      pass = colDef(name = "Total Passed",
+      pass = colDef(name = "Total Passed with Pure Tone",
                     align = "center"),
       `pass with OAE` = colDef(name = "Total Passed with OAE",
                                align = "center"),
+      `total_passed` = colDef(name = "Total Passed",
+                              align = "center"),
       refer = colDef(name = "Total Referred",
                      align = "center"),
       screened = colDef(name = "Total Screened",
                         align = "center"),
       absent = colDef(name = "Total Absent",
-                      align = "center")),
+                      align = "center"),
+      pass_pct = colDef(name = "Pass Rate",
+                        align = "center",
+                        format = colFormat(percent = TRUE, digits = 2))),
     striped = TRUE,
     outlined = TRUE,
     compact = TRUE,
