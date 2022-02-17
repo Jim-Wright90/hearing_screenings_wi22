@@ -76,7 +76,8 @@ ear$school
 ear$school <- factor(ear$school, levels = c("Twin Oaks",
                                             "McCornack",
                                             "River Road",
-                                            "Buena Vista"))
+                                            "Buena Vista",
+                                            "Howard"))
 
 
 ear_res <- ear %>% 
@@ -105,6 +106,13 @@ screen_stat2 <- ear %>%
          pass_pct = (total_passed / screened)) %>% 
   select(1, 2, 3, 7, 4, 6, 5, 8)
 
+str(screen_stat2)
+
+screen_stat2 <- screen_stat2 %>% 
+  mutate_if(is.integer, as.numeric)
+
+str(screen_stat2)
+
 screen_stat3 <- ear %>% 
   group_by(screen_res, grade) %>% 
   count() %>% 
@@ -116,6 +124,9 @@ screen_stat3 <- ear %>%
          total_passed = sum(`pass` + `pass with OAE`),
          pass_pct = (total_passed / screened)) %>% 
   select(1, 2, 3, 7, 4, 6, 5, 8)
+
+screen_stat3 <- screen_stat3 %>% 
+  mutate_if(is.integer, as.numeric)
 ```
 
 # Results 
@@ -232,9 +243,6 @@ grd_tbl2
 ```
 
 
-
-
-
 Row {.tabset}
 -----------------------------------------------------------------------
 
@@ -266,4 +274,45 @@ res_tbl <- ear_res %>%
 
 ```{r, include=TRUE}
 res_tbl
+```
+
+
+
+```{r, include=FALSE}
+
+test_scn <- screen_stat2 %>% 
+  select(school, screened) %>% 
+  group_by(school, screened) %>% 
+  mutate(scr_tot = sum(screened))
+
+test_scn %>% 
+  adorn_totals("row")
+
+
+# sch_screen <- screen_stat2 %>% 
+#   select(school, screened) %>% 
+#   pivot_wider(
+#     names_from = school,
+#     values_from = screened
+#   ) %>% 
+#   mutate(total = sum(c_across(cols = everything()))) %>% 
+#   mutate(pct_1 = `Twin Oaks` / total,
+#          pct_2 = `McCornack` / total,
+#          pct_3 = `River Road` / total,
+#          pct_4 = `Buena Vista` / total)
+
+#?c_across
+
+# sch_screen2 <- sch_screen %>% 
+#   pivot_longer(
+#     cols = c(1:4),
+#     names_to = "school",
+#     values_to = "total_screened"
+#   ) %>% 
+#   pivot_longer(
+#     cols = c(6:9),
+#     names_to = "school_percent",
+#     values_to = "proportion_screened"
+#   )
+
 ```
