@@ -77,7 +77,8 @@ ear$school <- factor(ear$school, levels = c("Twin Oaks",
                                             "McCornack",
                                             "River Road",
                                             "Buena Vista",
-                                            "Howard"))
+                                            "Howard",
+                                            "Charlemeagne"))
 
 
 ear_res <- ear %>% 
