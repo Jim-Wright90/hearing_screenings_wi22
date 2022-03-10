@@ -3,7 +3,6 @@ title: "Winter 2022 Thursday Hearing Screenings"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    social: menu
     source_code: embed
     vertical_layout: scroll
     theme: 
@@ -79,7 +78,8 @@ ear$school <- factor(ear$school, levels = c("Twin Oaks",
                                             "Buena Vista",
                                             "Howard",
                                             "Charlemeagne",
-                                            "Gilham"))
+                                            "Gilham",
+                                            "Chinese Immersion"))
 
 
 ear_res <- ear %>% 
